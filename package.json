@@ -1,0 +1,23 @@
+{
+  "name": "halloween-gallery",
+  "version": "1.0.0",
+  "description": "photo gallery",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkuwalek/halloween-gallery.git"
+  },
+  "author": "PKuwalek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pkuwalek/halloween-gallery/issues"
+  },
+  "homepage": "https://github.com/pkuwalek/halloween-gallery#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  }
+}
