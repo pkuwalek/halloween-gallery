@@ -1,0 +1,7 @@
+#header {
+    background: url("imgs/moon.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: rgb(94, 255, 0);
+}
