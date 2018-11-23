@@ -8,7 +8,11 @@ app.get("/", function(req, res){
 });
 
 app.get("/home", function(req,res){
-    res.render("home");
+    var photos = [
+        {image: "imgs/candles.jpg"},
+        {image: "imgs/spiders.jpg"},
+    ]
+    res.render("home", {photos:photos});
 });
 
 app.listen(3000, function(){
