@@ -50,10 +50,6 @@ app.get("/home", (req, res) => {
 
 //auth routes
 
-app.get("/login", (req, res) => {
-    res.render("login");
-});
-
 //show sign up form
 app.get("/register", (req, res) => {
     res.render("register");
@@ -70,6 +66,24 @@ app.post("/register", (req, res) => {
             res.redirect("/home");
         });
     });
+});
+
+//show login form
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+//handle login logic
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/home",
+        failureRedirect: "/login"
+    }), (req, res) => {
+});
+
+//logout route
+app.get("/logout", (req, res) => {
+    req.logout();
+    res.redirect("/home");
 });
 
 app.listen(3000, () => {
