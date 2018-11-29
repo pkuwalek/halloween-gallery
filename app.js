@@ -31,10 +31,17 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+});
+
+//landing page route
 app.get("/", (req, res) => {
     res.render("landing");
 });
 
+//home route
 app.get("/home", (req, res) => {
     var photos = [
         {image: "imgs/candles.jpg"},
@@ -48,6 +55,8 @@ app.get("/home", (req, res) => {
     res.render("home", {photos:photos});
 });
 
+
+
 //auth routes
 
 //show sign up form
@@ -56,7 +65,7 @@ app.get("/register", (req, res) => {
 });
 //handle sign up logic
 app.post("/register", (req, res) => {
-    var newUser = new User({username: req.body.username});
+    var newUser = new User({username: req.body.username, firstName: req.body.firstName});
     User.register(newUser, req.body.password, (err, user) => {
         if(err){
             console.log(err)
@@ -85,6 +94,24 @@ app.get("/logout", (req, res) => {
     req.logout();
     res.redirect("/home");
 });
+
+//users profile page route
+app.get("/users/:id", isLoggedIn, (req, res) => {
+    User.findById(req.params.id, (err, foundUser) => {
+        if(err){
+            console.log(err);
+            res.redirect("/home");
+        }
+        res.render("users/show", {user: foundUser});
+    });
+});
+
+function isLoggedIn (req, res, next) {
+    if (req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+};
 
 app.listen(3000, () => {
     console.log("The Server Has Started!");
