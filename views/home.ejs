@@ -13,7 +13,9 @@
         <div class="card-columns">
             <% photos.forEach(function(photo){ %>
                     <div class="card">
-                        <img class="card-img-top" src="<%= photo.image %>" alt="">
+                        <a href="<%= photo.image %>" data-fancybox>
+                            <img class="card-img-top" src="<%= photo.image %>" alt="">
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title">Photo</h5>
                             <a href="" class="btn btn-outline-success btn-sm">Download</a>
