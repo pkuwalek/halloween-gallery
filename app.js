@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const MongoClient = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
+const flash = require("connect-flash");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -18,6 +19,7 @@ mongoose.connect("mongodb://localhost:27017/tester", (err, db) => {
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine", "ejs");
+app.use(flash());
 
 //passport configuration
 app.use(require("express-session")({
@@ -33,6 +35,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
     next();
 });
 
@@ -55,8 +59,6 @@ app.get("/home", (req, res) => {
     res.render("home", {photos:photos});
 });
 
-
-
 //auth routes
 
 //show sign up form
@@ -68,10 +70,11 @@ app.post("/register", (req, res) => {
     var newUser = new User({username: req.body.username, firstName: req.body.firstName});
     User.register(newUser, req.body.password, (err, user) => {
         if(err){
-            console.log(err)
-            return res.render("register");
+            req.flash("error", err.message);
+            return res.redirect("register");
         }
         passport.authenticate("local")(req, res, () => {
+            req.flash("success", "Successfully signed up as " + user.firstName);
             res.redirect("/home");
         });
     });
@@ -92,6 +95,7 @@ app.post("/login", passport.authenticate("local",
 //logout route
 app.get("/logout", (req, res) => {
     req.logout();
+    req.flash("success", "You logged out successfully.");
     res.redirect("/home");
 });
 
@@ -110,6 +114,7 @@ function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()){
         return next();
     }
+    req.flash("error", "You need to be logged in!");
     res.redirect("/login");
 };
 
