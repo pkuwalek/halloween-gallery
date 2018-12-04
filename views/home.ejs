@@ -11,13 +11,13 @@
 <section id="gallery">
     <div class="container">
         <div class="card-columns">
-            <% photos.forEach(function(photo){ %>
+            <% images.forEach(function(image){ %>
                     <div class="card">
-                        <a href="<%= photo.image %>" data-fancybox>
-                            <img class="card-img-top" src="<%= photo.image %>" alt="">
+                        <a href="<%= image.path %>" data-fancybox>
+                            <img class="card-img-top" src="<%= image.path %>" alt="">
                         </a>
                         <div class="card-body">
-                            <h5 class="card-title">Photo</h5>
+                            <h5 class="card-title"><%= image.title %></h5>
                             <a href="" class="btn btn-outline-success btn-sm">Download</a>
                             <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-heart"></i></a>
                         </div>

@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 var User = require("./models/user");
+var Image = require("./models/image");
 
 mongoose.connect("mongodb://localhost:27017/tester", (err, db) => {
   if(!err) {
@@ -47,16 +48,14 @@ app.get("/", (req, res) => {
 
 //home route
 app.get("/home", (req, res) => {
-    var photos = [
-        {image: "imgs/candles.jpg"},
-        {image: "imgs/spiders.jpg"},
-        {image: "imgs/black-cat.jpg"},
-        {image: "imgs/ingredients.jpg"},
-        {image: "imgs/book.jpg"},
-        {image: "imgs/cookies.jpg"},
-        {image: "imgs/jack-o-lantern.jpg"},
-    ]
-    res.render("home", {photos:photos});
+    //get images from DB
+    Image.find({}, (err, allImages) => {
+        if(err){
+            console.log(err);
+        } else {
+            res.render("home", {images:allImages});
+        }
+    });
 });
 
 //auth routes
