@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 
 //landing page route
 app.get("/", (req, res) => {
-    res.render("landing");
+    res.render("landing", {daysUntilHalloween:daysUntilHalloween()});
 });
 
 //home route
@@ -109,12 +109,71 @@ app.get("/users/:id", isLoggedIn, (req, res) => {
     });
 });
 
+app.get("/fav/:image_id", (req, res) => {
+    if(!req.isAuthenticated()){
+        req.flash("error", "You need to be logged in to like images.");
+        res.redirect("/home");
+    } else {
+        let imageId = req.params.image_id;
+        console.log(imageId)
+        let user =  req.user;
+        console.log(user)
+        var imageIndex = user.findFavImage(imageId)
+        console.log(imageIndex)
+        if(imageIndex == -1){
+            user.setFavImage(imageId);
+            res.redirect("/home");
+//            heartBtnWhiteToRed();
+        } else {
+            user.setFavImage(imageId);
+            res.redirect("/home");
+//            heartBtnRedToWhite();
+        }   
+    }
+});
+
+// app.get("/fav/:image_id", isLoggedIn, (req, res) => {
+//     Image.findById(req.params.image_id, (err, foundImage) => {
+//         if(err){
+//             console.log(err);
+//             res.redirect("/home");
+//         }
+//         console.log(foundImage.title , req.user.firstName);
+//     });
+// });
+
 function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()){
         return next();
     }
     req.flash("error", "You need to be logged in!");
     res.redirect("/login");
+};
+
+//change heart button style
+function heartBtnWhiteToRed() {
+    const heartBtn = document.getElementById("heartbtn");
+    heartBtn.classList.remove("btn-outline-danger");
+    heartBtn.classList.add("btn-danger");
+};
+function heartBtnRedToWhite() {
+    const heartBtn = document.getElementById("heartbtn");
+    heartBtn.classList.remove("btn-danger");
+    heartBtn.classList.add("btn-outline-danger");
+};
+
+function daysUntilHalloween() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let halloween = new Date(today.getFullYear(), 9, 31);
+    const oneDay = 1000*60*60*24;
+    if (today.getMonth() == 9 && today.getDate() == 31){
+        return 0;
+    }
+    if (today.getMonth() > 9){
+        halloween.setFullYear(halloween.getFullYear()+1);
+    }
+    return (Math.ceil((halloween-today)/oneDay));
 };
 
 app.listen(3000, () => {
