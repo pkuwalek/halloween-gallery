@@ -1,9 +1,16 @@
+body {
+    font-family: 'Nunito', sans-serif;
+}
 #header {
-    background: url("../imgs/moon.jpg");
+    background: url("../imgs/danny-g-395663-unsplash.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    color: rgb(94, 255, 0);
+    color: white;
+}
+
+nav {
+    border-bottom: 1px solid #ffbb33;
 }
 
 @media (min-width: 576px) {

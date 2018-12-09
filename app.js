@@ -150,18 +150,6 @@ function isLoggedIn (req, res, next) {
     res.redirect("/login");
 };
 
-//change heart button style
-function heartBtnWhiteToRed() {
-    const heartBtn = document.getElementById("heartbtn");
-    heartBtn.classList.remove("btn-outline-danger");
-    heartBtn.classList.add("btn-danger");
-};
-function heartBtnRedToWhite() {
-    const heartBtn = document.getElementById("heartbtn");
-    heartBtn.classList.remove("btn-danger");
-    heartBtn.classList.add("btn-outline-danger");
-};
-
 function daysUntilHalloween() {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
