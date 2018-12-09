@@ -24,7 +24,7 @@ UserSchema.methods.setFavImage = function setFavImage (id) {
         });
     }
     else {
-        delete this.imgsLiked[imageIndex];
+        this.imgsLiked.remove(id);
         this.save((err) => {
             console.log(err);
         });

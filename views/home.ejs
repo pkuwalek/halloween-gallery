@@ -19,12 +19,22 @@
                         <div class="card-body">
                             <h5 class="card-title"><%= image.title %></h5>
                             <a href="<%= image.path %>" download class="btn btn-outline-success btn-sm">Download</a>
-                            <a href="/fav/<%=image._id%>" class="btn btn-outline-danger btn-sm"><i class="far fa-heart"></i></a>
+                            <a href="/fav/<%=image._id%>" id="fav_<%=image._id%>" class="btn btn-outline-danger btn-sm"><i class="far fa-heart"></i></a>
+                            <% if(currentUser) { %>
+                                <% if(currentUser.findFavImage(image._id) != -1 ) { %>
+                                    <script>
+                                        var fav_button = document.getElementById("fav_<%=image._id%>");
+                                        fav_button.classList.remove("btn-outline-danger");
+                                        fav_button.classList.add("btn-danger");
+                                    </script>
+                                <% } %>
+                            <% } %>
                         </div>
                     </div>
             <% }); %>
         </div>
     </div>
 </section>
+
 
 <% include partials/footer %>

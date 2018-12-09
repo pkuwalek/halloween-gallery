@@ -87,7 +87,8 @@ app.get("/login", (req, res) => {
 app.post("/login", passport.authenticate("local", 
     {
         successRedirect: "/home",
-        failureRedirect: "/login"
+        failureRedirect: "/login",
+        failureFlash: true,
     }), (req, res) => {
 });
 
@@ -105,7 +106,14 @@ app.get("/users/:id", isLoggedIn, (req, res) => {
             console.log(err);
             res.redirect("/home");
         }
-        res.render("users/show", {user: foundUser});
+        Image.find({_id: {$in: foundUser.imgsLiked }}, (err, images) => {
+            if(err){
+                console.log(err);
+                res.redirect("/home");
+            }
+            res.render("users/show", {user: foundUser, images: images});
+        });  
+        
     });
 });
 
@@ -115,32 +123,17 @@ app.get("/fav/:image_id", (req, res) => {
         res.redirect("/home");
     } else {
         let imageId = req.params.image_id;
-        console.log(imageId)
         let user =  req.user;
-        console.log(user)
         var imageIndex = user.findFavImage(imageId)
-        console.log(imageIndex)
         if(imageIndex == -1){
             user.setFavImage(imageId);
-            res.redirect("/home");
-//            heartBtnWhiteToRed();
+            res.redirect("back");
         } else {
             user.setFavImage(imageId);
-            res.redirect("/home");
-//            heartBtnRedToWhite();
+            res.redirect("back");
         }   
     }
 });
-
-// app.get("/fav/:image_id", isLoggedIn, (req, res) => {
-//     Image.findById(req.params.image_id, (err, foundImage) => {
-//         if(err){
-//             console.log(err);
-//             res.redirect("/home");
-//         }
-//         console.log(foundImage.title , req.user.firstName);
-//     });
-// });
 
 function isLoggedIn (req, res, next) {
     if (req.isAuthenticated()){
